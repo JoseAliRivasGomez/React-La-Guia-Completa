@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  mysql:
+    ports:
+      - "3306:3306"
+    build: './docker/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: "myrootpassword"
+      MYSQL_DATABASE: "quiosconext"
+      MYSQL_USER: jose
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - dbData:/var/lib/mysql
+volumes:
+  app:
+  dbData:

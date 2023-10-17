@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.progreso {
+    transition-property: width ;
+    transition-duration: 300ms;
+}
