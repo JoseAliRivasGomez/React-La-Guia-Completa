@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+// import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -15,6 +15,7 @@ import {
 import styles from '~/styles/index.css'
 import Header from '~/components/header'
 import Footer from '~/components/footer'
+import { useEffect, useState } from "react";
 
 // export const links: LinksFunction = () => [
 //   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -30,7 +31,7 @@ export const meta = () => {
     ];
 };
 
-export const links: LinksFunction = () => [
+export const links = () => [
     {
         rel: 'stylesheet',
         href: 'https://necolas.github.io/normalize.css/8.0.1/normalize.css'
@@ -56,9 +57,62 @@ export const links: LinksFunction = () => [
 
 
 export default function App() {
+
+    // const carritoFromLS = typeof window !== 'undefined' ? JSON.parse(localStorage?.getItem('carrito')) ?? [] : [];
+    const [carrito, setCarrito] = useState([]);
+
+    // useEffect para cargar el state con info del LS
+    useEffect(() => {
+        const carritoLS = JSON.parse(localStorage.getItem('carrito')) ?? [];
+        setCarrito(carritoLS);
+    }, []);
+
+    // UseEffect para grabar en el LS
+    useEffect(() => {
+        if (carrito?.length === 0) return;
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+    }, [carrito]);
+
+    const agregarCarrito = (guitarra) => {
+        if(carrito.some((guitarraState) => guitarraState.id === guitarra.id)){
+            const carritoUpdated = carrito.map(guitarraState => {
+                if(guitarraState.id === guitarra.id){
+                    guitarraState.cantidad = guitarra.cantidad
+                }
+                return guitarraState
+            })
+            setCarrito(carritoUpdated)
+        }else{
+            setCarrito([...carrito, guitarra])
+        }
+    }
+
+    const actualizarCantidad = (guitarra) => {
+        const carritoUpdated = carrito.map(guitarraState => {
+            if(guitarraState.id === guitarra.id){
+                guitarraState.cantidad = guitarra.cantidad
+            }
+            return guitarraState
+        })
+        setCarrito(carritoUpdated)
+    }
+
+    const eliminarGuitarra = (id) => {
+        const carritoUpdated = carrito.filter(guitarraState => guitarraState.id != id)
+        carritoUpdated.length === 0 && localStorage.setItem('carrito', '[]');
+        setCarrito(carritoUpdated)
+    }
+
   return(
       <Document>
-          <Outlet />
+          <Outlet 
+            context={{
+                carrito,
+                agregarCarrito,
+                actualizarCantidad,
+                eliminarGuitarra,
+            }} 
+          />
       </Document>
   )
 }

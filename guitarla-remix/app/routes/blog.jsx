@@ -1,4 +1,4 @@
-import { Outlet } from '@remix-run/react'
+import { Outlet, useOutletContext } from '@remix-run/react'
 import styles from '~/styles/blog.css'
 
 export function links() {
@@ -13,7 +13,9 @@ export function links() {
 function Blog() {
   return (
     <main className="contenedor">
-      <Outlet />
+      <Outlet
+            context={useOutletContext()} 
+          />
     </main>
   )
 }
