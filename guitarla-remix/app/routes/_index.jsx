@@ -52,7 +52,7 @@ function Index() {
         </main>
 
         <Curso
-            curso={curso.attributes}
+            curso={curso?.attributes}
         />
 
         <section className='contenedor'>

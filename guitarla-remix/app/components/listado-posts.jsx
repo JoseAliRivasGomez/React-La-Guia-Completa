@@ -7,8 +7,8 @@ export default function ListadoPosts({posts}) {
         <div className="blog">
             {posts.map(post => (
                 <Post
-                    key={post.id}
-                    post={post.attributes}
+                    key={post?.id}
+                    post={post?.attributes}
                 />
             ))}
         </div>
